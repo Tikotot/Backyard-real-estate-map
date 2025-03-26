@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Real Estate Interactive Map</h2>
+    <div id="map"></div>
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([30.1, 30.85], 10); 
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define property locations and details
+        var properties = [
+            { lat: 30.0625, lon: 30.8772, name: "VYE & Karmell by SODIC", acres: 464, prices: "Apt. 9.5M - 31M<br>H. 23M - 25M<br>TH. 24M - 39M<br>TW. 37M - 41M<br>V. 47M - 54M", bua: "Apt. 81-200sqm<br>H. up to 196sqm<br>TH. 181-238sqm<br>TW. 229-238sqm<br>V. 220-288sqm", finishing: "FF – Semi – Core& Shell", payment: "5% + 5% over 8 or 10 years", delivery: "Off-Plan 1 to 3 Years" },
+            { lat: 30.0797, lon: 30.8775, name: "ESTATE & ESTATE Residence by SODIC", acres: 274, prices: "Apt. 8.5M - 36M<br>TH. 21M - 30.5M<br>TW. 53M - 57.5M<br>V. 36M - 196M", bua: "Apt. 125-268sqm<br>TH. 219-221sqm<br>TW. 248sqm<br>V. 237-631sqm", finishing: "FF – Semi – Core& Shell", payment: "5% + 5% over 8 or 10 years", delivery: "Off-Plan 1 to 3 Years" },
+            { lat: 30.0606, lon: 30.8650, name: "SOLANA by ORA", acres: 316, prices: "Apt. 15M - 42M<br>LOFT. 22M - 34M<br>Pent. 28M - 43M<br>TH. 26M - 36M<br>TW. 34M - 48M<br>V. 37M - 87M", bua: "Apt. 126-201sqm<br>LOFT. 149-228sqm<br>Pent. 195-253sqm<br>TH. 168-197sqm<br>TW. 178-206sqm<br>V. 190-319sqm", finishing: "FF", payment: "5% + 5% over 10 years", delivery: "Off-Plan 1 to 3 Years" },
+            { lat: 30.0817, lon: 30.8683, name: "Dejoya by Taj", acres: 144, prices: "Apt. 7.5M - 14M<br>Dup. 14M - 18M<br>TW. 29M - 35M<br>V. 37M - 50M", bua: "Apt. 108-185sqm<br>Dup. 282-290sqm<br>TW. 250-275sqm<br>V. 302-406sqm", finishing: "FF", payment: "10% Down Payment Over 10 Years", delivery: "Off-Plan 3 Years" },
+            { lat: 30.0833, lon: 30.8619, name: "MAR ViLLE by ALMARASEM", acres: 111, prices: "Apt. 9M - 27M", bua: "1BDR. GF 96sqm<br>2BDR. GF 118-144sqm<br>3BDR. GF 166-254sqm<br>4BDR. GF 240-272sqm", finishing: "FF", payment: "5% DP + 5% after 3 months Over 10 Years", delivery: "Off-Plan 3 Years" },
+            { lat: 30.0864, lon: 30.8610, name: "Reviers by TATWEER", acres: 100, prices: "Apt. 9M - 17M<br>Dup. 20.5M - 22M<br>TW. 21M<br>V. 33M - 40M", bua: "Apt. 120-160sqm<br>Dup. 220-235sqm<br>TW. 184sqm<br>V. 200-250sqm", finishing: "Core & Shell", payment: "5% Down Payment Over 10 Years", delivery: "Off-Plan 4.5 Years" },
+            { lat: 30.1011, lon: 30.8589, name: "LUGAR by Gates", acres: 65, prices: "Apt. 2BDR 8M - 10M<br>TH. 15M - 18M<br>V. 29M - 33M", bua: "Apt. 2BDR 115sqm<br>TH. 185-190sqm<br>V. 255sqm", finishing: "Core & Shell", payment: "2.5% DP + 4.5% after 3 months Over 8 Years", delivery: "Off-Plan 4 Years" },
+            { lat: 30.1084, lon: 30.8612, name: "Hills of One by People & Places", acres: 65, prices: "Studio 10M - 13.5M<br>Pent.H 13.5M - 33M<br>TH. 25M - 35M<br>V. 17.5M - 62M", bua: "Studio 62-93sqm<br>Pent.H 139-237sqm<br>TH. 175-313sqm<br>V. 150-579sqm", finishing: "F.F – Semi – Core & Shell", payment: "10% DP Over 8 Years", delivery: "Off-Plan 4 Years" },
+            { lat: 30.0781, lon: 30.8892, name: "Citypark by NAIA West", acres: 140, prices: "TH. 19.3M+<br>TW. 22.5M+ (4BDR)<br>TW. 25M+ (5BDR)<br>V. 35M+", bua: "TH. 195sqm+<br>TW. 255-280sqm<br>V. 385sqm+", finishing: "F.F", payment: "10% DP Over 6 Years", delivery: "Off-Plan 1.5 Years" }
+        ];
+
+        // Add markers to the map
+        properties.forEach(property => {
+            L.marker([property.lat, property.lon]).addTo(map)
+                .bindPopup(`<b>${property.name}</b><br>
+                            <b>Size:</b> ${property.acres} Acres<br>
+                            <b>Prices:</b> ${property.prices}<br>
+                            <b>BUA:</b> ${property.bua}<br>
+                            <b>Finishing:</b> ${property.finishing}<br>
+                            <b>Payment:</b> ${property.payment}<br>
+                            <b>Delivery:</b> ${property.delivery}`);
+        });
+
+    </script>
+
+</body>
+</html>
